@@ -1,0 +1,74 @@
+.detalle-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+  font-family: 'Poppins', sans-serif;
+  background-color: #111;
+  color: #f0f0f0;
+  min-height: 100vh;
+}
+
+.detalle-card {
+  display: flex;
+  max-width: 900px;
+  gap: 2rem;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  flex-wrap: wrap;
+}
+
+.detalle-img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.detalle-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.detalle-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.detalle-marca {
+  font-size: 1rem;
+  color: #999;
+  margin-bottom: 1rem;
+}
+
+.detalle-precio {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ff6f61;
+}
+
+.detalle-desc {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.detalle-btn {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.detalle-btn:hover {
+  background-color: #e65b50;
+}
