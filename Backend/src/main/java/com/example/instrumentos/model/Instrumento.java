@@ -1,5 +1,7 @@
 package com.example.instrumentos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,14 +41,17 @@ public class Instrumento {
     // Relación con CategoriaInstrumento
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_categoria_instrumento", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "instrumentos"})
     private CategoriaInstrumento categoriaInstrumento;
 
     // Relación con DetallePedido
     @OneToMany(mappedBy = "instrumento")
+    @JsonIgnore
     private List<DetallePedido> detallesPedido;
 
     // Relación con HistorialPrecioInstrumento
     @OneToMany(mappedBy = "instrumento", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<HistorialPrecioInstrumento> historialPrecios;
 
     // Método para obtener el precio actual
