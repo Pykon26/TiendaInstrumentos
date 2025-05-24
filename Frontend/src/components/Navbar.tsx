@@ -9,6 +9,8 @@ const Navbar: React.FC = () => {
         <Link to="/" className="navbar-logo">TiendaMusica</Link>
         <div className="navbar-links">
           <Link to="/" className="navbar-link">Inicio</Link>
+          <Link to="/productos" className="navbar-link">Productos</Link>
+          <Link to="/login" className="navbar-link">Iniciar Sesión</Link>
           {/* <Link to="/productos" className="navbar-link">Productos</Link> */}
           {/* Más links futuros */}
         </div>

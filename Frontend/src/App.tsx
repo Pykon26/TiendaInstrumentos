@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Footer from "./components/Footer";
+import Productos from "./pages/Productos";
+
 
 
 
@@ -18,6 +20,7 @@ const App: React.FC = () => {
         <Route path="/instrumento/:id" element={<InstrumentoDetalle />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/productos" element={<Productos />} />
 
 
       </Routes>
