@@ -1,5 +1,6 @@
 package com.example.instrumentos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class CategoriaInstrumento {
 
     // Relación con Instrumentos
     @OneToMany(mappedBy = "categoriaInstrumento", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Instrumento> instrumentos;
 
     // Constructor conveniente

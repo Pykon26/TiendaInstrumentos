@@ -1,5 +1,7 @@
 package com.example.instrumentos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,10 +35,12 @@ public class Usuario {
     // Relación con Rol
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "usuarios"})
     private Rol rol;
 
     // Relación con Pedidos
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Pedido> pedidos;
 
     // Constructor conveniente sin pedidos
