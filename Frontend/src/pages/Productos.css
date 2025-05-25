@@ -4,65 +4,118 @@
   background-color: #111;
   color: white;
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .productos-container h2 {
   text-align: center;
   margin-bottom: 2rem;
+  letter-spacing: 1px;
 }
 
 .productos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .productos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .productos-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .producto-card {
   background-color: #1e1e1e;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.18);
   padding: 1rem;
   text-align: center;
-  transition: transform 0.2s;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 370px;
+  /* Elimina el max-width y el margin para que ocupe bien la columna */
 }
 
 .producto-card:hover {
   transform: scale(1.03);
+  box-shadow: 0 8px 32px rgba(255,111,97,0.08);
 }
 
 .producto-card img {
   width: 100%;
-  height: 180px;
+  max-width: 180px;
+  height: 140px;
   object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
+  background: #222;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+  display: block;
 }
 
 .producto-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.04rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #fff;
 }
 
-.producto-card .precio {
-  font-size: 1.1rem;
-  color: #ff6f61;
-  margin-bottom: 0.3rem;
+.producto-card .descripcion {
+  font-size: 0.92rem;
+  margin-bottom: 0.4rem;
+  color: #ccc;
+  min-height: 38px;
+  max-height: 38px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .producto-card .marca {
-  font-size: 0.9rem;
-  color: #ccc;
+  font-size: 0.93rem;
+  color: #b3b3b3;
+  margin-bottom: 0.2rem;
+}
+
+.producto-card .categoria {
+  font-size: 0.92rem;
+  color: #ffaa91;
+  margin-bottom: 0.2rem;
+}
+
+.producto-card .precio {
+  font-size: 1rem;
+  color: #ff6f61;
+  margin-bottom: 0.2rem;
+  font-weight: 500;
 }
 
 .ver-detalle {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: auto;
   color: #ff6f61;
   text-decoration: none;
   font-weight: bold;
+  border-radius: 6px;
+  padding: 0.32em 1em;
+  background: transparent;
+  border: 1.2px solid #ff6f61;
+  transition: background 0.13s, color 0.13s;
+  font-size: 0.96rem;
 }
 
 .ver-detalle:hover {
-  text-decoration: underline;
+  background: #ff6f61;
+  color: #fff;
+  text-decoration: none;
+  border-color: #ff6f61;
 }

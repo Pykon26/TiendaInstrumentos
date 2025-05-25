@@ -1,50 +1,49 @@
-import React from "react";
-import "./Productos.css";
+import React, { useEffect, useState } from "react";
 import { Instrumento } from "../models/Instrumento";
-import { Link } from "react-router-dom";
-
-// 🔁 Simulamos datos por ahora
-const productosMock: Instrumento[] = [
-  {
-    idInstrumento: 1,
-    codigo: "GTR123",
-    denominacion: "Guitarra Fender Stratocaster",
-    marca: "Fender",
-    stock: 5,
-    descripcion: "Guitarra eléctrica clásica con excelente sonido.",
-    imagen: "https://images.unsplash.com/photo-1511376777868-611b54f68947",
-    categoria: { idCategoriaInstrumento: 1, denominacion: "Cuerdas" },
-    historialPrecios: [],
-    detalles: [],
-  },
-  {
-    idInstrumento: 2,
-    codigo: "DRM456",
-    denominacion: "Batería Pearl Export",
-    marca: "Pearl",
-    stock: 2,
-    descripcion: "Set completo de batería acústica.",
-    imagen: "https://images.unsplash.com/photo-1519340333755-5061d6d81d72",
-    categoria: { idCategoriaInstrumento: 2, denominacion: "Percusión" },
-    historialPrecios: [],
-    detalles: [],
-  }
-];
+import { getProductos } from "../services/productService";
+import "./Productos.css";
+// Si usas react-router-dom para detalle:
+// import { Link } from "react-router-dom";
 
 const Productos: React.FC = () => {
+  const [productos, setProductos] = useState<Instrumento[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const data = await getProductos();
+        setProductos(data);
+      } catch (err: any) {
+        setError("No se pudieron cargar los productos");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProductos();
+  }, []);
+
+  if (loading) return <div className="productos-container">Cargando productos...</div>;
+  if (error) return <div className="productos-container">{error}</div>;
+
   return (
     <div className="productos-container">
-      <h2>Catálogo de Instrumentos</h2>
+      <h2>Instrumentos disponibles</h2>
       <div className="productos-grid">
-        {productosMock.map(producto => (
-          <div className="producto-card" key={producto.idInstrumento}>
-            <img src={producto.imagen} alt={producto.denominacion} />
+        {productos.map((producto) => (
+          <div key={producto.idInstrumento} className="producto-card">
             <h3>{producto.denominacion}</h3>
-            <p className="precio">${producto.historialPrecios?.[0]?.precio?.toLocaleString() || 'Consultar'}</p>
-            <p className="marca">{producto.marca}</p>
-            <Link to={`/instrumento/${producto.idInstrumento}`} className="ver-detalle">
-              Ver detalle
-            </Link>
+            <img
+              src={`/img/${producto.imagen}`}
+              alt={producto.denominacion}
+              loading="lazy"
+            />
+            <div className="descripcion">{producto.descripcion}</div>
+            <div className="marca">{producto.marca}</div>
+            {/* <div className="categoria">{producto.categoria?.denominacion}</div> */}
+            {/* Si quieres agregar link a detalle, descomenta y ajusta la ruta */}
+            {/* <Link className="ver-detalle" to={`/instrumentos/${producto.idInstrumento}`}>Ver detalle</Link> */}
           </div>
         ))}
       </div>
