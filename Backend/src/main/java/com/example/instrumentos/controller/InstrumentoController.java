@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.instrumentos.dto.InstrumentoRequest;
+import com.example.instrumentos.dto.InstrumentoRequestDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -43,19 +43,19 @@ public class InstrumentoController {
 //    }
 
     @GetMapping
-    public ResponseEntity<List<InstrumentoRequest>> getAllInstrumentos(@RequestParam(required = false) Long idCategoria) {
+    public ResponseEntity<List<InstrumentoRequestDTO>> getAllInstrumentos(@RequestParam(required = false) Long idCategoria) {
         List<Instrumento> instrumentos = (idCategoria != null)
                 ? instrumentoService.findByCategoria(idCategoria)
                 : instrumentoService.findAll();
 
-        List<InstrumentoRequest> dtos = instrumentos.stream()
+        List<InstrumentoRequestDTO> dtos = instrumentos.stream()
                 .map(instrumentoService::toInstrumentoRequest) // <--- ACA!
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InstrumentoRequest> getInstrumentoById(@PathVariable Long id) {
+    public ResponseEntity<InstrumentoRequestDTO> getInstrumentoById(@PathVariable Long id) {
         return instrumentoService.findById(id)
                 .map(instrumentoService::toInstrumentoRequest) // <--- ACA!
                 .map(ResponseEntity::ok)

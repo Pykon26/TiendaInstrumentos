@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.instrumentos.dto.InstrumentoRequest;
+import com.example.instrumentos.dto.InstrumentoRequestDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -130,8 +130,8 @@ public class InstrumentoService {
         return instrumentoRepository.save(instrumento);
     }
 
-    public InstrumentoRequest toInstrumentoRequest(Instrumento instrumento) {
-        InstrumentoRequest dto = new InstrumentoRequest();
+    public InstrumentoRequestDTO toInstrumentoRequest(Instrumento instrumento) {
+        InstrumentoRequestDTO dto = new InstrumentoRequestDTO();
         dto.setIdInstrumento(instrumento.getIdInstrumento());
         dto.setCodigo(instrumento.getCodigo());
         dto.setDenominacion(instrumento.getDenominacion());
