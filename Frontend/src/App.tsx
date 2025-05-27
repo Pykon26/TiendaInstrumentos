@@ -17,7 +17,7 @@ const App: React.FC = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/instrumento/:id" element={<InstrumentoDetalle />} />
+        <Route path="/productos/:id" element={<InstrumentoDetalle />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/productos" element={<Productos />} />

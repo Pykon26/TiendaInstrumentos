@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.instrumentos.dto.InstrumentoRequest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/instrumentos")
@@ -19,26 +21,48 @@ public class InstrumentoController {
 
     private final InstrumentoService instrumentoService;
 
+//    @GetMapping
+//    public ResponseEntity<List<Instrumento>> getAllInstrumentos(
+//            @RequestParam(required = false) Long idCategoria) {
+//
+//        List<Instrumento> instrumentos;
+//        if (idCategoria != null) {
+//            instrumentos = instrumentoService.findByCategoria(idCategoria);
+//        } else {
+//            instrumentos = instrumentoService.findAll();
+//        }
+//
+//        return ResponseEntity.ok(instrumentos);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Instrumento> getInstrumentoById(@PathVariable Long id) {
+//        return instrumentoService.findById(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+
     @GetMapping
-    public ResponseEntity<List<Instrumento>> getAllInstrumentos(
-            @RequestParam(required = false) Long idCategoria) {
+    public ResponseEntity<List<InstrumentoRequest>> getAllInstrumentos(@RequestParam(required = false) Long idCategoria) {
+        List<Instrumento> instrumentos = (idCategoria != null)
+                ? instrumentoService.findByCategoria(idCategoria)
+                : instrumentoService.findAll();
 
-        List<Instrumento> instrumentos;
-        if (idCategoria != null) {
-            instrumentos = instrumentoService.findByCategoria(idCategoria);
-        } else {
-            instrumentos = instrumentoService.findAll();
-        }
-
-        return ResponseEntity.ok(instrumentos);
+        List<InstrumentoRequest> dtos = instrumentos.stream()
+                .map(instrumentoService::toInstrumentoRequest) // <--- ACA!
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Instrumento> getInstrumentoById(@PathVariable Long id) {
+    public ResponseEntity<InstrumentoRequest> getInstrumentoById(@PathVariable Long id) {
         return instrumentoService.findById(id)
+                .map(instrumentoService::toInstrumentoRequest) // <--- ACA!
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
 
     @PostMapping
     public ResponseEntity<?> createInstrumento(@RequestBody Instrumento instrumento) {

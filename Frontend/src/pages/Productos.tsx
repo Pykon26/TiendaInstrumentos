@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Instrumento } from "../models/Instrumento";
 import { getProductos } from "../services/productService";
 import "./Productos.css";
-// Si usas react-router-dom para detalle:
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Productos: React.FC = () => {
   const [productos, setProductos] = useState<Instrumento[]>([]);
@@ -41,9 +40,10 @@ const Productos: React.FC = () => {
             />
             <div className="descripcion">{producto.descripcion}</div>
             <div className="marca">{producto.marca}</div>
-            {/* <div className="categoria">{producto.categoria?.denominacion}</div> */}
-            {/* Si quieres agregar link a detalle, descomenta y ajusta la ruta */}
-            {/* <Link className="ver-detalle" to={`/instrumentos/${producto.idInstrumento}`}>Ver detalle</Link> */}
+            <div className="precio">${producto.precio?.toLocaleString() ?? ""}</div>
+            <Link className="ver-detalle" to={`/productos/${producto.idInstrumento}`}>
+              Ver detalle
+            </Link>
           </div>
         ))}
       </div>

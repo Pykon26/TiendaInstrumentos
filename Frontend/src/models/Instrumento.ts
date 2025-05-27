@@ -10,7 +10,7 @@ export interface Instrumento {
   stock: number;
   descripcion: string;
   imagen: string;
-  categoria: CategoriaInstrumento;
-  detalles?: DetallePedido[];
-  historialPrecios?: HistorialPrecioInstrumento[];
+  idCategoriaInstrumento: number;
+  categoria?: string; // el nombre de la categoría, puede venir o no
+  precio: number;     // el precio actual del instrumento
 }

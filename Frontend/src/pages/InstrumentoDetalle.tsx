@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./InstrumentoDetalle.css";
-import api from "../services/api"; // Asegurate de tener esta instancia de Axios configurada
-import { Instrumento } from "../models/Instrumento"; // Definilo según tu modelo
+import api from "../services/api";
+import { Instrumento } from "../models/Instrumento";
 
 const InstrumentoDetalle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,14 +31,17 @@ const InstrumentoDetalle: React.FC = () => {
   return (
     <div className="detalle-container">
       <div className="detalle-card">
-        <img src={instrumento.imagen} alt={instrumento.denominacion} className="detalle-img" />
+        <img src={`/img/${instrumento.imagen}`} alt={instrumento.denominacion} className="detalle-img" />
         <div className="detalle-info">
           <h2 className="detalle-title">{instrumento.denominacion}</h2>
           <p className="detalle-marca">
-            {instrumento.marca} | {instrumento.categoria?.denominacion}
+            {instrumento.marca}
+            {instrumento.categoria && <> | {instrumento.categoria}</>}
           </p>
           <p className="detalle-precio">
-            ${instrumento.precio?.toLocaleString() ?? ""}
+            ${instrumento.precio !== undefined && instrumento.precio !== null
+              ? instrumento.precio.toLocaleString()
+              : ""}
           </p>
           <p className="detalle-desc">{instrumento.descripcion}</p>
           <button className="detalle-btn">Agregar al carrito</button>

@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstrumentoDTO {
+public class InstrumentoRequest {
     private Long idInstrumento;
     private String codigo;
     private String denominacion;
