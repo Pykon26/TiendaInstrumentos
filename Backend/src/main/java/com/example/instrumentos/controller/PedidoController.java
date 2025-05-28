@@ -22,20 +22,20 @@ public class PedidoController {
 
     private final PedidoService pedidoService;
 
-    // Obtener todos los pedidos
+    //todos los pedidos
     @GetMapping
     public ResponseEntity<List<Pedido>> getAllPedidos() {
         return ResponseEntity.ok(pedidoService.findAll());
     }
 
-    // Obtener pedidos por usuario
+    //pedidos por usuario
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Pedido>> getPedidosByUsuario(@PathVariable Long usuarioId) {
         List<Pedido> pedidos = pedidoService.findByUsuarioId(usuarioId);
         return ResponseEntity.ok(pedidos);
     }
 
-    // Obtener pedido por ID
+    //pedido por ID
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> getPedidoById(@PathVariable Long id) {
         return pedidoService.findById(id)
@@ -43,7 +43,7 @@ public class PedidoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Crear nuevo pedido
+    //crear nuevo pedido
     @PostMapping
     public ResponseEntity<?> createPedido(
             @RequestBody Pedido pedido,
@@ -51,13 +51,13 @@ public class PedidoController {
         try {
             log.info("Recibiendo pedido: {}", pedido);
 
-            // Obtener ID de usuario del header o atributo
+            //ID de usuario del header o atributo
             String userIdHeader = request.getHeader("X-User-Id");
             Object userIdAttribute = request.getAttribute("usuarioId");
 
             Long userId = null;
 
-            // Intentar obtener el ID del header primero
+            //ID del header primero
             if (userIdHeader != null && !userIdHeader.isEmpty()) {
                 try {
                     userId = Long.parseLong(userIdHeader);
@@ -67,28 +67,28 @@ public class PedidoController {
                 }
             }
 
-            // Si no está en el header, intentar del atributo
+            //ID del atributo
             if (userId == null && userIdAttribute != null) {
                 userId = (Long) userIdAttribute;
                 log.info("Usuario ID obtenido del atributo: {}", userId);
             }
 
-            // Validar que tenemos un usuario
+            //valida que tenemos un usuario
             if (userId == null) {
                 return crearRespuestaError("No se pudo identificar al usuario", HttpStatus.UNAUTHORIZED);
             }
 
-            // Crear objeto Usuario con el ID
+            //crea objeto Usuario con el ID
             Usuario usuario = new Usuario();
             usuario.setIdUsuario(userId);
             pedido.setUsuario(usuario);
 
-            // Validar el pedido
+            //valida el pedido
             if (pedido.getDetalles() == null || pedido.getDetalles().isEmpty()) {
                 return crearRespuestaError("El pedido no tiene detalles", HttpStatus.BAD_REQUEST);
             }
 
-            // Guardar el pedido
+            //guarda el pedido
             Pedido savedPedido = pedidoService.save(pedido);
 
             log.info("Pedido guardado con ID: {}", savedPedido.getIdPedido());
@@ -103,7 +103,7 @@ public class PedidoController {
         }
     }
 
-    // Actualizar estado del pedido
+    //actualiza estado del pedido
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> updateEstadoPedido(@PathVariable Long id, @RequestBody Map<String, String> body) {
         try {
@@ -121,7 +121,7 @@ public class PedidoController {
         }
     }
 
-    // Eliminar pedido
+    //elimina pedido
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePedido(@PathVariable Long id) {
         try {
@@ -134,7 +134,7 @@ public class PedidoController {
         }
     }
 
-    // Método auxiliar para crear respuestas de error
+    //metodo auxiliar para crear respuestas de error
     private ResponseEntity<Map<String, String>> crearRespuestaError(String mensaje, HttpStatus status) {
         Map<String, String> response = new HashMap<>();
         response.put("error", mensaje);

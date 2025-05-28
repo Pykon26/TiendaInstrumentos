@@ -32,16 +32,16 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        // Inicializar roles
+        //inicializa roles
         inicializarRoles();
 
-        // Inicializar usuario admin
+        //inicializa usuario admin
         inicializarUsuarioAdmin();
 
-        // Inicializar categorías
+        //inicializa categorias
         inicializarCategorias();
 
-        // Cargar instrumentos desde JSON
+        //carga los instrumentos desde JSON
         loadInstrumentosFromJson();
     }
 
@@ -65,7 +65,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setNombre("Administrador");
             admin.setApellido("Sistema");
             admin.setEmail("admin@instrumentos.com");
-            // Contraseña: admin123 encriptada con MD5
+            //contraseña: admin123 encriptada con MD5
             admin.setContrasenia("0192023a7bbd73250516f069df18b500");
             admin.setRol(rolAdmin);
 

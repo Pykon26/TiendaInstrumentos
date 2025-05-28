@@ -1,5 +1,6 @@
 package com.example.instrumentos.controller;
 
+import com.example.instrumentos.model.CategoriaInstrumento;
 import com.example.instrumentos.model.Instrumento;
 import com.example.instrumentos.service.InstrumentoService;
 import lombok.RequiredArgsConstructor;
@@ -7,11 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.instrumentos.dto.InstrumentoRequestDTO;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/instrumentos")
@@ -21,48 +20,26 @@ public class InstrumentoController {
 
     private final InstrumentoService instrumentoService;
 
-//    @GetMapping
-//    public ResponseEntity<List<Instrumento>> getAllInstrumentos(
-//            @RequestParam(required = false) Long idCategoria) {
-//
-//        List<Instrumento> instrumentos;
-//        if (idCategoria != null) {
-//            instrumentos = instrumentoService.findByCategoria(idCategoria);
-//        } else {
-//            instrumentos = instrumentoService.findAll();
-//        }
-//
-//        return ResponseEntity.ok(instrumentos);
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Instrumento> getInstrumentoById(@PathVariable Long id) {
-//        return instrumentoService.findById(id)
-//                .map(ResponseEntity::ok)
-//                .orElse(ResponseEntity.notFound().build());
-//    }
-
     @GetMapping
-    public ResponseEntity<List<InstrumentoRequestDTO>> getAllInstrumentos(@RequestParam(required = false) Long idCategoria) {
-        List<Instrumento> instrumentos = (idCategoria != null)
-                ? instrumentoService.findByCategoria(idCategoria)
-                : instrumentoService.findAll();
+    public ResponseEntity<List<Instrumento>> getAllInstrumentos(
+            @RequestParam(required = false) Long idCategoria) {
 
-        List<InstrumentoRequestDTO> dtos = instrumentos.stream()
-                .map(instrumentoService::toInstrumentoRequest) // <--- ACA!
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        List<Instrumento> instrumentos;
+        if (idCategoria != null) {
+            instrumentos = instrumentoService.findByCategoria(idCategoria);
+        } else {
+            instrumentos = instrumentoService.findAll();
+        }
+
+        return ResponseEntity.ok(instrumentos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InstrumentoRequestDTO> getInstrumentoById(@PathVariable Long id) {
+    public ResponseEntity<Instrumento> getInstrumentoById(@PathVariable Long id) {
         return instrumentoService.findById(id)
-                .map(instrumentoService::toInstrumentoRequest) // <--- ACA!
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-
 
     @PostMapping
     public ResponseEntity<?> createInstrumento(@RequestBody Instrumento instrumento) {
@@ -74,14 +51,45 @@ public class InstrumentoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateInstrumento(@PathVariable Long id, @RequestBody Instrumento instrumento) {
+    public ResponseEntity<?> updateInstrumento(@PathVariable Long id, @RequestBody Map<String, Object> requestBody) {
         try {
             log.info("Actualizando instrumento con ID: {}", id);
+            log.info("Datos recibidos: {}", requestBody);
 
             return instrumentoService.findById(id)
                     .map(existingInstrumento -> {
-                        instrumento.setIdInstrumento(id);
-                        Instrumento updated = instrumentoService.save(instrumento);
+                        // Actualizar campos básicos
+                        if (requestBody.containsKey("codigo")) {
+                            existingInstrumento.setCodigo((String) requestBody.get("codigo"));
+                        }
+                        if (requestBody.containsKey("denominacion")) {
+                            existingInstrumento.setDenominacion((String) requestBody.get("denominacion"));
+                        }
+                        if (requestBody.containsKey("marca")) {
+                            existingInstrumento.setMarca((String) requestBody.get("marca"));
+                        }
+                        if (requestBody.containsKey("stock")) {
+                            existingInstrumento.setStock(((Number) requestBody.get("stock")).intValue());
+                        }
+                        if (requestBody.containsKey("descripcion")) {
+                            existingInstrumento.setDescripcion((String) requestBody.get("descripcion"));
+                        }
+                        if (requestBody.containsKey("imagen")) {
+                            existingInstrumento.setImagen((String) requestBody.get("imagen"));
+                        }
+
+                        // Manejar la categoría - ESTA ES LA PARTE IMPORTANTE
+                        if (requestBody.containsKey("categoriaId")) {
+                            Long categoriaId = ((Number) requestBody.get("categoriaId")).longValue();
+                            log.info("Asignando categoría con ID: {}", categoriaId);
+
+                            // Crear el objeto CategoriaInstrumento con solo el ID
+                            CategoriaInstrumento categoria = new CategoriaInstrumento();
+                            categoria.setIdCategoriaInstrumento(categoriaId);
+                            existingInstrumento.setCategoriaInstrumento(categoria);
+                        }
+
+                        Instrumento updated = instrumentoService.save(existingInstrumento);
                         log.info("Instrumento actualizado correctamente: {}", updated);
                         return ResponseEntity.ok(updated);
                     })
@@ -106,7 +114,7 @@ public class InstrumentoController {
         }
     }
 
-    // Endpoint adicional para actualizar precio
+    //actualizar precio
     @PatchMapping("/{id}/precio")
     public ResponseEntity<?> updatePrecio(@PathVariable Long id, @RequestBody Map<String, Double> body) {
         try {
@@ -122,7 +130,7 @@ public class InstrumentoController {
         }
     }
 
-    // Endpoint adicional para reponer stock
+    //reponer stock
     @PatchMapping("/{id}/stock")
     public ResponseEntity<?> updateStock(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
         try {

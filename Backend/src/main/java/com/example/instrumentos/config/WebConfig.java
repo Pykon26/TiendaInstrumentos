@@ -13,24 +13,22 @@ public class WebConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                .allowedHeaders("*")
-                .exposedHeaders("X-User-Id")
-                .allowCredentials(true);
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor)
+                .addPathPatterns("/api/**") // Aplicar a todas las rutas /api
+                .excludePathPatterns(
+                        "/api/usuarios/login",
+                        "/api/usuarios/registro"
+                ); // Excluir rutas de login/registro
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/api/**")
-                .excludePathPatterns(
-                        "/api/error",
-                        "/api/favicon.ico",
-                        "/api/usuarios/login",
-                        "/api/usuarios/registro"
-                );
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:5173", "http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS") // ← PATCH AGREGADO
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }

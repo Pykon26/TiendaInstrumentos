@@ -22,9 +22,16 @@ public class DetallePedido {
     private Pedido pedido;
 
     @ManyToOne
-    @JoinColumn(name = "idInstrumento")
+    @JoinColumn(name = "idInstrumento", insertable = false, updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "detallesPedido", "historialPrecios"})
     private Instrumento instrumento;
 
+    // AGREGAR ESTE CAMPO:
+    @Column(name = "idInstrumento")
+    private Long instrumentoId;
+
     private Integer cantidad;
+
+    // AGREGAR ESTE CAMPO TAMBIÉN (para el precio unitario):
+    private Double precioUnitario;
 }

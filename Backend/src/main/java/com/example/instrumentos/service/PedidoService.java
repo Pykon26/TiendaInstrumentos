@@ -74,9 +74,9 @@ public class PedidoService {
         for (DetallePedido detalle : pedido.getDetalles()) {
             // Obtener el instrumento
             Instrumento instrumento = instrumentoRepository
-                    .findById(detalle.getInstrumento().getIdInstrumento())
+                    .findById(detalle.getInstrumentoId()) // ✅ CORRECTO
                     .orElseThrow(() -> new IllegalArgumentException(
-                            "Instrumento no encontrado: " + detalle.getInstrumento().getIdInstrumento()));
+                            "Instrumento no encontrado: " + detalle.getInstrumentoId()));
 
             // Verificar stock disponible
             if (instrumento.getStock() < detalle.getCantidad()) {
@@ -96,7 +96,7 @@ public class PedidoService {
             DetallePedido detalleGuardado = detallePedidoRepository.save(detalle);
             detallesGuardados.add(detalleGuardado);
 
-            // Sumar al total
+            // Sumar al total - USAR EL PRECIO DEL INSTRUMENTO ACTUAL
             total += instrumento.getPrecioActual() * detalle.getCantidad();
         }
 

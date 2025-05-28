@@ -1,8 +1,8 @@
 package com.example.instrumentos.service;
 
-import com.example.instrumentos.dto.LoginRequest;
-import com.example.instrumentos.dto.LoginResponse;
-import com.example.instrumentos.dto.RegistroRequest;
+import com.example.instrumentos.dto.request.LoginRequest;
+import com.example.instrumentos.dto.response.LoginResponse;
+import com.example.instrumentos.dto.request.RegistroRequestDTO;
 import com.example.instrumentos.model.Rol;
 import com.example.instrumentos.model.Usuario;
 import com.example.instrumentos.repository.RolRepository;
@@ -62,9 +62,9 @@ public class UsuarioService {
     }
 
     // Registrar nuevo usuario
-    public Usuario registrarUsuario(RegistroRequest registroRequest) {
+    public Usuario registrarUsuario(RegistroRequestDTO registroRequest) {
         // Verificar si el usuario ya existe
-        if (usuarioRepository.existsByEmail(registroRequest.getNombreUsuario())) {
+        if (usuarioRepository.existsByEmail(registroRequest.getEmail())) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
 
@@ -84,9 +84,9 @@ public class UsuarioService {
 
         // Crear el nuevo usuario
         Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setEmail(registroRequest.getNombreUsuario());
+        nuevoUsuario.setEmail(registroRequest.getEmail());
         // Separar el email para obtener nombre y apellido (temporal)
-        String[] partes = registroRequest.getNombreUsuario().split("@");
+        String[] partes = registroRequest.getApellido().split("@");
         nuevoUsuario.setNombre(partes[0]);
         nuevoUsuario.setApellido("Usuario"); // Valor por defecto
         nuevoUsuario.setContrasenia(claveEncriptada);

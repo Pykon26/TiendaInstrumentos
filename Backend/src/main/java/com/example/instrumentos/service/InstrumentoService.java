@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.instrumentos.dto.InstrumentoRequestDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -129,30 +128,4 @@ public class InstrumentoService {
 
         return instrumentoRepository.save(instrumento);
     }
-
-    public InstrumentoRequestDTO toInstrumentoRequest(Instrumento instrumento) {
-        InstrumentoRequestDTO dto = new InstrumentoRequestDTO();
-        dto.setIdInstrumento(instrumento.getIdInstrumento());
-        dto.setCodigo(instrumento.getCodigo());
-        dto.setDenominacion(instrumento.getDenominacion());
-        dto.setMarca(instrumento.getMarca());
-        dto.setStock(instrumento.getStock());
-        dto.setDescripcion(instrumento.getDescripcion());
-        dto.setImagen(instrumento.getImagen());
-        // Setea categoría si la tenés embebida
-        if (instrumento.getCategoriaInstrumento() != null) {
-            dto.setIdCategoriaInstrumento(instrumento.getCategoriaInstrumento().getIdCategoriaInstrumento());
-            dto.setCategoria(instrumento.getCategoriaInstrumento().getDenominacion());
-        }
-        // Setea precio más nuevo
-        HistorialPrecioInstrumento historial = historialPrecioRepository.findTopByInstrumento_IdInstrumentoOrderByFechaDesc(instrumento.getIdInstrumento());
-        if (historial != null) {
-            dto.setPrecio(historial.getPrecio());
-        } else {
-            dto.setPrecio(null);
-        }
-        return dto;
-    }
-
-
 }

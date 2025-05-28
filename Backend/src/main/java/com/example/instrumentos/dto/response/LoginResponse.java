@@ -1,4 +1,4 @@
-package com.example.instrumentos.dto;
+package com.example.instrumentos.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

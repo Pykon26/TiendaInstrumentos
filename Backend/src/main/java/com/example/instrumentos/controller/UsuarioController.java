@@ -1,8 +1,8 @@
 package com.example.instrumentos.controller;
 
-import com.example.instrumentos.dto.LoginRequest;
-import com.example.instrumentos.dto.LoginResponse;
-import com.example.instrumentos.dto.RegistroRequest;
+import com.example.instrumentos.dto.request.LoginRequest;
+import com.example.instrumentos.dto.response.LoginResponse;
+import com.example.instrumentos.dto.request.RegistroRequestDTO;
 import com.example.instrumentos.model.Usuario;
 import com.example.instrumentos.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -44,15 +44,15 @@ public class UsuarioController {
         }
     }
 
-    // Registro de usuarios
+    //registro de usuarios
     @PostMapping("/registro")
-    public ResponseEntity<?> registro(@RequestBody RegistroRequest registroRequest) {
+    public ResponseEntity<?> registro(@RequestBody RegistroRequestDTO registroRequest) {
         try {
-            log.info("Intento de registro para usuario: {}", registroRequest.getNombreUsuario());
+            log.info("Intento de registro para usuario: {}", registroRequest.getEmail());
 
             Usuario nuevoUsuario = usuarioService.registrarUsuario(registroRequest);
 
-            // Crear respuesta sin incluir la contraseña
+            //respuesta sin incluir la contraseña
             Map<String, Object> response = new HashMap<>();
             response.put("id", nuevoUsuario.getIdUsuario());
             response.put("email", nuevoUsuario.getEmail());
@@ -75,13 +75,13 @@ public class UsuarioController {
         }
     }
 
-    // Obtener todos los usuarios (solo admin)
+    //obtener todos los usuarios (solo admin)
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         return ResponseEntity.ok(usuarioService.findAll());
     }
 
-    // Obtener usuario por ID (solo admin)
+    //obtener usuario por ID (solo admin)
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
         return usuarioService.findById(id)
@@ -89,7 +89,7 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Actualizar un usuario existente (solo admin)
+    //actualizar un usuario existente (solo admin)
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
         try {
@@ -103,7 +103,7 @@ public class UsuarioController {
         }
     }
 
-    // Eliminar usuario (solo admin)
+    //eliminar usuario (solo admin)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         return usuarioService.findById(id)
