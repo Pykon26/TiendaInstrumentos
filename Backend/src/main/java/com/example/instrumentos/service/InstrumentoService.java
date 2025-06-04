@@ -58,11 +58,13 @@ public class InstrumentoService {
             }
         }
 
+        boolean isNew = (instrumento.getIdInstrumento() == null);
+
         // Guardar el instrumento
         Instrumento savedInstrumento = instrumentoRepository.save(instrumento);
 
         // Si se proporciona un precio y es un nuevo instrumento, crear historial de precio
-        if (instrumento.getIdInstrumento() == null && instrumento.getPrecioActual() != null) {
+        if (isNew && instrumento.getPrecioActual() != null) {
             HistorialPrecioInstrumento historialPrecio = new HistorialPrecioInstrumento(
                     savedInstrumento,
                     instrumento.getPrecioActual()
